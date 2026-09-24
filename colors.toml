@@ -1,0 +1,34 @@
+# Purple Mountains — an Omarchy theme
+# Near-black surfaces, soft white text and a violet-blue accent lifted from the
+# purple-mountains wallpaper. Palette built with Aether.
+mode = "dark"
+
+accent = "#6c77ea"
+selection = "#2c3040"
+muted = "#8c8a9d"
+
+background = "#0d0d0d"
+dark_background = "#0a0a0a"
+darker_background = "#070707"
+lighter_background = "#252525"
+
+foreground = "#f4f1f1"
+dark_foreground = "#b7b5b5"
+light_foreground = "#f6f3f3"
+bright_foreground = "#f7f5f5"
+
+red = "#ee7777"
+yellow = "#f39065"
+orange = "#f18b8b"
+green = "#55e755"
+cyan = "#75aff0"
+blue = "#6c77ea"
+magenta = "#df6dea"
+brown = "#915353"
+
+bright_red = "#f27373"
+bright_yellow = "#f8976d"
+bright_green = "#79ec79"
+bright_cyan = "#71b0f4"
+bright_blue = "#a6adf6"
+bright_magenta = "#dd79ec"
