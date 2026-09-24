@@ -34,7 +34,7 @@ Everything else (terminals, btop, Neovim via aether.nvim, the Omarchy shell, Hyp
 ```
 colors.toml     palette (Omarchy 4 semantic format)
 icons.theme     Yaru-magenta
-backgrounds/    1-purple-mountains.jpg, 2-times-square-rain.jpg
+backgrounds/    1-purple-mountains.jpg
 preview.png     shown in the theme switcher and on themes.omarchy.org
 ```
 
@@ -44,4 +44,4 @@ Omarchy 4.x. Older Omarchy 3 installs can still use the palette: Omarchy derives
 
 ## License
 
-Theme files are MIT licensed (see `LICENSE`). Wallpapers are redistributed for use with this theme only; if you are the author of one of them and want it credited differently or removed, open an issue.
+Theme files are MIT licensed (see `LICENSE`). The wallpaper is redistributed for use with this theme only; if you are its author and want it credited differently or removed, open an issue.
