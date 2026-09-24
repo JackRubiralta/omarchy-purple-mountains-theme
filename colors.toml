@@ -32,6 +32,3 @@ bright_green = "#8de89a"
 bright_cyan = "#8ac9f4"
 bright_blue = "#a6adf6"
 bright_magenta = "#e58cf0"
-
-# Focused-window border: violet to orchid. The shell reuses it for popup and notification borders.
-hyprland_active_border = "rgba(6c77eaee) rgba(df6deaee) 45deg"
