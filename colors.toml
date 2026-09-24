@@ -10,7 +10,7 @@ muted = "#8c8a9d"
 background = "#0d0d0d"
 dark_background = "#0a0a0a"
 darker_background = "#070707"
-lighter_background = "#252525"
+lighter_background = "#24242e"
 
 foreground = "#f4f1f1"
 dark_foreground = "#b3b1c2"
@@ -26,12 +26,12 @@ blue = "#6c77ea"
 magenta = "#df6dea"
 brown = "#915353"
 
-bright_red = "#f27373"
+bright_red = "#f48f8f"
 bright_yellow = "#f6d78f"
 bright_green = "#8de89a"
 bright_cyan = "#8ac9f4"
 bright_blue = "#a6adf6"
-bright_magenta = "#dd79ec"
+bright_magenta = "#e58cf0"
 
 # Focused-window border: violet to orchid. The shell reuses it for popup and notification borders.
 hyprland_active_border = "rgba(6c77eaee) rgba(df6deaee) 45deg"
