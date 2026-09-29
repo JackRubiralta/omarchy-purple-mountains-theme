@@ -52,11 +52,13 @@ local transparency_multiplier = 1
 local solid_transparency_multiplier = 0.6
 
 -- Catch-all first, so it only sticks on windows the default-opacity rule
--- below doesn't match (later rules win).
-o.window(".*", {
+-- below doesn't match (later rules win). Both rules also match class and
+-- title so Hyprland re-runs them together whenever a window's title
+-- changes; without that, terminals flicker between the two values.
+o.window({ class = ".*", title = ".*" }, {
   opacity = string.format("1.0 %.3f", (100 - 2.5 * solid_transparency_multiplier) / 100),
 })
-o.window({ tag = "default-opacity" }, {
+o.window({ class = ".*", title = ".*", tag = "default-opacity" }, {
   opacity = string.format("%.3f %.3f",
     (100 - 2.5 * transparency_multiplier) / 100,
     (100 - 4 * transparency_multiplier) / 100),
