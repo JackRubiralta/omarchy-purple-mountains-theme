@@ -45,11 +45,11 @@ Omarchy doesn't let a git-installed theme change Hyprland settings, so window tr
 -- solid_transparency_multiplier (s): apps Omarchy keeps solid when focused
 -- (browsers, video players, games, Steam, …). Focused stays 100 %,
 -- unfocused = 100 - 2.5*s %
---   s = 0.6 → 98.5 %  (default: stock Omarchy's browser fade)
+--   s = 1   → 97.5 %  (default; stock Omarchy's browser fade is 98.5 %, s = 0.6)
 --   s = 2   → 95 %    (glass mode)
 --   s = 0   → fully solid.
 local transparency_multiplier = 1
-local solid_transparency_multiplier = 0.6
+local solid_transparency_multiplier = 1
 
 -- Catch-all first, so it only sticks on windows the default-opacity rule
 -- below doesn't match (later rules win). Both rules also match class and
