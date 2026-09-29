@@ -36,11 +36,17 @@ Omarchy doesn't let a git-installed theme change Hyprland settings, so window tr
 ```lua
 -- Transparency multipliers.
 --
--- transparency_multiplier (m): terminals and most apps (Omarchy's
--- default-opacity tag). focused = 100 - 2.5*m %, unfocused = 100 - 4*m %
+-- transparency_multiplier (m): most apps (Omarchy's default-opacity tag).
+-- focused = 100 - 2.5*m %, unfocused = 100 - 4*m %
 --   m = 1 → 97.5 % / 96 %  (default: about the same as stock Omarchy)
 --   m = 3 → 92.5 % / 88 %  (glass mode)
 --   m = 0 → fully solid. Keep m below 25 (unfocused windows reach 0 % there).
+--
+-- terminal_transparency_multiplier (t): terminals only (Omarchy's terminal
+-- tag: Alacritty, foot, kitty, Ghostty, btop and other Omarchy TUIs).
+-- Same formula as m, and overrides it for terminals.
+--   t = 1 → 97.5 % / 96 %  (default: same as other apps)
+--   t = 5 → 87.5 % / 80 %  (glass mode)
 --
 -- solid_transparency_multiplier (s): apps Omarchy keeps solid when focused
 -- (browsers, video players, games, Steam, …). Focused stays 100 %,
@@ -49,12 +55,13 @@ Omarchy doesn't let a git-installed theme change Hyprland settings, so window tr
 --   s = 2   → 95 %    (glass mode)
 --   s = 0   → fully solid.
 local transparency_multiplier = 1
+local terminal_transparency_multiplier = 1
 local solid_transparency_multiplier = 1
 
 -- Catch-all first, so it only sticks on windows the default-opacity rule
--- below doesn't match (later rules win). Both rules also match class and
--- title so Hyprland re-runs them together whenever a window's title
--- changes; without that, terminals flicker between the two values.
+-- below doesn't match; terminal rule last (later rules win). All three also
+-- match class and title so Hyprland re-runs them together whenever a
+-- window's title changes; without that, terminals flicker between values.
 o.window({ class = ".*", title = ".*" }, {
   opacity = string.format("1.0 %.3f", (100 - 2.5 * solid_transparency_multiplier) / 100),
 })
@@ -63,11 +70,16 @@ o.window({ class = ".*", title = ".*", tag = "default-opacity" }, {
     (100 - 2.5 * transparency_multiplier) / 100,
     (100 - 4 * transparency_multiplier) / 100),
 })
+o.window({ class = ".*", title = ".*", tag = "terminal" }, {
+  opacity = string.format("%.3f %.3f",
+    (100 - 2.5 * terminal_transparency_multiplier) / 100,
+    (100 - 4 * terminal_transparency_multiplier) / 100),
+})
 ```
 
-Glass mode is `transparency_multiplier = 3` with `solid_transparency_multiplier = 2`.
+Glass mode is `transparency_multiplier = 3`, `terminal_transparency_multiplier = 5` and `solid_transparency_multiplier = 2`.
 
-The first multiplier covers terminals, file managers and most apps. The second covers everything Omarchy normally keeps solid (browsers, video players, games, Steam, image viewers, …). Those stay fully solid while you use them and only fade when you click away. Stock Omarchy keeps video players and games fully solid even when unfocused; this snippet gives them the same unfocused fade as browsers. **Super + Backspace** still toggles transparency for the focused window. For a frosted look, also turn on blur: `hl.config({ decoration = { blur = { enabled = true, size = 6, passes = 2 } } })`.
+The first multiplier covers file managers and most apps, the second covers terminals, and the third covers everything Omarchy normally keeps solid (browsers, video players, games, Steam, image viewers, …). Those solid apps stay fully solid while you use them and only fade when you click away. Stock Omarchy keeps video players and games fully solid even when unfocused; this snippet gives them the same unfocused fade as browsers. **Super + Backspace** still toggles transparency for the focused window. For a frosted look, also turn on blur: `hl.config({ decoration = { blur = { enabled = true, size = 6, passes = 2 } } })`.
 
 ## What's inside
 
