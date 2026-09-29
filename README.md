@@ -34,12 +34,28 @@ Everything else (terminals, btop, Neovim via aether.nvim, the Omarchy shell, Hyp
 Omarchy doesn't let a git-installed theme change Hyprland settings, so window transparency is a small snippet you add yourself. Paste it at the end of `~/.config/hypr/looknfeel.lua`. Hyprland reloads when you save.
 
 ```lua
--- Window transparency multiplier.
--- focused = 100 - 2.5*m %, unfocused = 100 - 4*m %
+-- Transparency multipliers.
+--
+-- transparency_multiplier (m): terminals and most apps (Omarchy's
+-- default-opacity tag). focused = 100 - 2.5*m %, unfocused = 100 - 4*m %
 --   m = 1 → 97.5 % / 96 %  (default: about the same as stock Omarchy)
 --   m = 3 → 92.5 % / 88 %  (glass mode)
 --   m = 0 → fully solid. Keep m below 25 (unfocused windows reach 0 % there).
+--
+-- solid_transparency_multiplier (s): apps Omarchy keeps solid when focused
+-- (browsers, video players, games, Steam, …). Focused stays 100 %,
+-- unfocused = 100 - 2.5*s %
+--   s = 0.6 → 98.5 %  (default: stock Omarchy's browser fade)
+--   s = 2   → 95 %    (glass mode)
+--   s = 0   → fully solid.
 local transparency_multiplier = 1
+local solid_transparency_multiplier = 0.6
+
+-- Catch-all first, so it only sticks on windows the default-opacity rule
+-- below doesn't match (later rules win).
+o.window(".*", {
+  opacity = string.format("1.0 %.3f", (100 - 2.5 * solid_transparency_multiplier) / 100),
+})
 o.window({ tag = "default-opacity" }, {
   opacity = string.format("%.3f %.3f",
     (100 - 2.5 * transparency_multiplier) / 100,
@@ -47,24 +63,9 @@ o.window({ tag = "default-opacity" }, {
 })
 ```
 
-Set `transparency_multiplier = 3` for glass mode. The rule covers every window with Omarchy's `default-opacity` tag, which includes terminals, file managers and most apps. Browsers, video players, Steam and games opt out of that tag, so they stay solid. **Super + Backspace** still toggles transparency for the focused window.
+Glass mode is `transparency_multiplier = 3` with `solid_transparency_multiplier = 2`.
 
-### Browsers
-
-Browsers (Firefox, Chromium and friends) have a separate rule: fully solid while focused, slightly faded when unfocused. A second multiplier controls only that unfocused fade. Paste it below the first snippet:
-
-```lua
--- Browser transparency multiplier.
--- focused stays 100 %, unfocused = 100 - 2.5*b %
---   b = 0.6 → 98.5 %  (default: same as stock Omarchy)
---   b = 2   → 95 %    (glass mode)
-local browser_transparency_multiplier = 0.6
-local browser_opacity = string.format("1.0 %.3f", (100 - 2.5 * browser_transparency_multiplier) / 100)
-o.window({ tag = "firefox-based-browser" }, { opacity = browser_opacity })
-o.window({ tag = "chromium-based-browser" }, { opacity = browser_opacity })
-```
-
-Glass mode is `transparency_multiplier = 3` with `browser_transparency_multiplier = 2`. For a frosted look, also turn on blur: `hl.config({ decoration = { blur = { enabled = true, size = 6, passes = 2 } } })`.
+The first multiplier covers terminals, file managers and most apps. The second covers everything Omarchy normally keeps solid (browsers, video players, games, Steam, image viewers, …). Those stay fully solid while you use them and only fade when you click away. Stock Omarchy keeps video players and games fully solid even when unfocused; this snippet gives them the same unfocused fade as browsers. **Super + Backspace** still toggles transparency for the focused window. For a frosted look, also turn on blur: `hl.config({ decoration = { blur = { enabled = true, size = 6, passes = 2 } } })`.
 
 ## What's inside
 
