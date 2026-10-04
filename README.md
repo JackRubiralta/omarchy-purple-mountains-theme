@@ -37,15 +37,15 @@ Omarchy doesn't let a git-installed theme change Hyprland settings, so window tr
 -- Transparency multipliers.
 --
 -- transparency_multiplier (m): most apps (Omarchy's default-opacity tag).
--- focused = 100 - 2.5*m %, unfocused = 100 - 4*m %
---   m = 1 → 97.5 % / 96 %  (default: about the same as stock Omarchy)
---   m = 3.2 → 92 % / 87.2 %  (glass mode)
+-- Focused stays 100 %, unfocused = 100 - 4*m %
+--   m = 1 → 96 %  (default: same unfocused fade as stock Omarchy)
+--   m = 2 → 92 %  (glass mode)
 --   m = 0 → fully solid. Keep m below 25 (unfocused windows reach 0 % there).
 --
 -- terminal_transparency_multiplier (t): terminals only (Omarchy's terminal
 -- tag: Alacritty, foot, kitty, Ghostty, btop and other Omarchy TUIs).
--- Same formula as m, and overrides it for terminals.
---   t = 1 → 97.5 % / 96 %  (default: same as other apps)
+-- focused = 100 - 2.5*t %, unfocused = 100 - 4*t %; overrides m for terminals.
+--   t = 1 → 97.5 % / 96 %  (default: about the same as stock Omarchy)
 --   t = 5 → 87.5 % / 80 %  (glass mode)
 --
 -- solid_transparency_multiplier (s): apps Omarchy keeps solid when focused
@@ -66,9 +66,7 @@ o.window({ class = ".*", title = ".*" }, {
   opacity = string.format("1.0 %.3f", (100 - 2.5 * solid_transparency_multiplier) / 100),
 })
 o.window({ class = ".*", title = ".*", tag = "default-opacity" }, {
-  opacity = string.format("%.3f %.3f",
-    (100 - 2.5 * transparency_multiplier) / 100,
-    (100 - 4 * transparency_multiplier) / 100),
+  opacity = string.format("1.0 %.3f", (100 - 4 * transparency_multiplier) / 100),
 })
 o.window({ class = ".*", title = ".*", tag = "terminal" }, {
   opacity = string.format("%.3f %.3f",
@@ -77,7 +75,7 @@ o.window({ class = ".*", title = ".*", tag = "terminal" }, {
 })
 ```
 
-Glass mode is `transparency_multiplier = 3.2`, `terminal_transparency_multiplier = 5` and `solid_transparency_multiplier = 0` (browsers, video and games stay 100 % solid).
+Glass mode is `transparency_multiplier = 2`, `terminal_transparency_multiplier = 5` and `solid_transparency_multiplier = 0` (most apps solid while focused and 92 % when you click away; browsers, video and games always 100 % solid).
 
 The first multiplier covers file managers and most apps, the second covers terminals, and the third covers everything Omarchy normally keeps solid (browsers, video players, games, Steam, image viewers, …). Those solid apps stay fully solid while you use them; with s above 0 they fade slightly when you click away. Stock Omarchy keeps video players and games fully solid even when unfocused; this snippet gives them the same unfocused fade as browsers. **Super + Backspace** still toggles transparency for the focused window. For a frosted look, also turn on blur: `hl.config({ decoration = { blur = { enabled = true, size = 6, passes = 2 } } })`.
 
