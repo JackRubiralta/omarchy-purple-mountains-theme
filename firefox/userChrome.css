@@ -1,0 +1,6 @@
+/* Purple Mountains: thicker outline on the selected tab (2px instead of Firefox's 1px).
+   The colour comes from the theme's tab_line; a Firefox theme can't set the width. */
+.tab-background:is([selected], [multiselected]) {
+  outline-width: 2px !important;
+  outline-offset: -2px !important;
+}

@@ -54,12 +54,17 @@ Everything else stays solid because Omarchy keeps it solid; the snippet doesn't 
 
 ## Optional: Firefox
 
-Omarchy doesn't theme Firefox, so the theme ships a matching Firefox theme in `firefox/`: the same near-black toolbar and tabs, soft white text, the violet-blue accent on the active tab line, tab loading indicator, focused address bar and highlighted menu items, muted grey icons, and no separator lines. It also sets Firefox and websites to dark mode.
+Omarchy doesn't theme Firefox, so the theme ships a matching Firefox theme in `firefox/`: the same near-black toolbar and tabs, soft white text, the violet-blue accent on the outline of the selected tab, tab loading indicator, focused address bar and highlighted menu items, muted grey icons, and no separator lines. It also sets Firefox and websites to dark mode.
 
 It isn't signed by Mozilla, so Firefox needs to allow unsigned add-ons first (this works on Arch's `firefox` package):
 
 1. Open `about:config` and set `xpinstall.signatures.required` to `false`.
 2. Open `about:addons`, click the gear, choose **Install Add-on From File…** and pick `~/.config/omarchy/themes/purple-mountains/firefox/purple-mountains.xpi`.
+
+For a thicker outline around the selected tab (2px instead of 1px), which a Firefox theme can't set by itself:
+
+3. In `about:config`, set `toolkit.legacyUserProfileCustomizations.stylesheets` to `true`.
+4. Copy `firefox/userChrome.css` into a `chrome` folder inside your Firefox profile (`about:support` → **Profile Folder** → Open), then restart Firefox.
 
 `firefox/manifest.json` is the source. After changing it, rebuild the add-on with `cd firefox && zip -X purple-mountains.xpi manifest.json`.
 
@@ -69,7 +74,7 @@ It isn't signed by Mozilla, so Firefox needs to allow unsigned add-ons first (th
 colors.toml          palette (Omarchy 4 semantic format)
 icons.theme          Yaru-magenta
 keyboard.rgb         keyboard backlight colour for supported laptops (accent)
-firefox/             matching Firefox theme: manifest.json (source) and purple-mountains.xpi
+firefox/             matching Firefox theme: manifest.json (source), purple-mountains.xpi, userChrome.css (thicker selected-tab outline)
 backgrounds/         1-purple-mountains.jpg (the wallpaper), omarchy.webp (plain branded wallpaper in the palette)
 unlock.png           lock-screen / boot-splash wordmark in the accent colour
 preview.png          shown in the theme switcher and on themes.omarchy.org
