@@ -52,11 +52,11 @@ Since Omarchy 4, windows are solid by default and only a few apps opt in to tran
 --
 -- transparency_multiplier (m): the apps Omarchy names as transparent
 -- (transparent-window tag: Nautilus, 1Password, omawrite, and windows
--- toggled with Super + Backspace). Focused stays 100 %,
--- unfocused = 100 - 4*m %
---   m = 1 → 96 %  (default: same unfocused fade as stock Omarchy)
---   m = 2 → 92 %  (glass mode)
---   m = 0 → fully solid. Keep m below 25 (unfocused windows reach 0 % there).
+-- toggled with Super + Backspace).
+-- focused = 100 - m %, unfocused = 100 - 3.75*m %
+--   m = 1 → 99 % / 96.25 %  (default: about the same as stock Omarchy's 98.5 / 96)
+--   m = 2 → 98 % / 92.5 %   (glass mode)
+--   m = 0 → fully solid. Keep m below 25 (unfocused windows reach 0 % near 26.7).
 --
 -- solid_transparency_multiplier (s): every other window (browsers, video
 -- players, games, Steam, …), which Omarchy keeps solid. Focused stays 100 %,
@@ -76,7 +76,9 @@ o.window({ class = ".*", title = ".*" }, {
   opacity = string.format("1.0 %.3f", (100 - 2.5 * solid_transparency_multiplier) / 100),
 })
 o.window({ class = ".*", title = ".*", tag = "transparent-window" }, {
-  opacity = string.format("1.0 %.3f", (100 - 4 * transparency_multiplier) / 100),
+  opacity = string.format("%.3f %.4f",
+    (100 - transparency_multiplier) / 100,
+    (100 - 3.75 * transparency_multiplier) / 100),
 })
 o.window({ class = ".*", title = ".*", tag = "terminal" }, {
   opacity = string.format("%.3f %.3f",
@@ -85,7 +87,7 @@ o.window({ class = ".*", title = ".*", tag = "terminal" }, {
 })
 ```
 
-Glass mode is `terminal_transparency_multiplier = 5`, `transparency_multiplier = 2` and `solid_transparency_multiplier = 0`: terminals see-through, the named apps solid while focused and 92 % when you click away, everything else always 100 % solid.
+Glass mode is `terminal_transparency_multiplier = 5`, `transparency_multiplier = 2` and `solid_transparency_multiplier = 0`: terminals see-through, the named apps 98 % while focused and 92.5 % when you click away, everything else always 100 % solid.
 
 To add an app to the named group, tag it in the same file, above the snippet: `o.transparent_window("org.gnome.TextEditor")` (find the class with `hyprctl clients`). For a frosted look, also pick **Glassy** in Omarchy's **Appearance → Windows → Window Opacity** menu, which adds blur behind see-through windows. Older Omarchy versions used a `default-opacity` tag instead of `transparent-window`; the snippet needs Omarchy 4.
 
