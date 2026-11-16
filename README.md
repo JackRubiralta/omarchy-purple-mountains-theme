@@ -33,63 +33,21 @@ Everything else (terminals, btop, Neovim via aether.nvim, the Omarchy shell, Hyp
 
 Omarchy doesn't let a git-installed theme change Hyprland settings, so window transparency is a small snippet you add yourself. Paste it at the end of `~/.config/hypr/looknfeel.lua`. Hyprland reloads when you save.
 
-Since Omarchy 4, windows are solid by default and only a few apps opt in to transparency (Omarchy gives them the `transparent-window` tag). The snippet keeps that split and puts a number on each group:
-
-| Group | Which windows | Multiplier |
-|---|---|---|
-| Terminals | Omarchy's `terminal` tag: Alacritty, foot, kitty, Ghostty, WezTerm, btop and Omarchy's other TUI windows | `t` |
-| Named apps | Omarchy's `transparent-window` tag: Nautilus, 1Password, omawrite, and any window you turn see-through with **Super + Backspace** | `m` |
-| Everything else | Browsers, video players, games, Steam, editors, chat apps, settings, … | `s` |
+| Group | Apps | While using it | Clicked away |
+|---|---|---|---|
+| Terminals | Ghostty, Alacritty, kitty, foot, WezTerm, btop and Omarchy's other terminal windows | 87.5 % | 80 % |
+| Selected apps | The apps Omarchy marks as transparent: Nautilus, omawrite, 1Password (if installed), and any window you turn see-through with **Super + Backspace** | 98.5 % | 92.5 % |
+| All other apps | Browsers, video players, games, Steam, chat apps, … | 100 % | 100 % |
 
 ```lua
--- Transparency multipliers.
---
--- terminal_transparency_multiplier (t): terminals only (Omarchy's terminal
--- tag: Alacritty, foot, kitty, Ghostty, WezTerm, btop and other Omarchy TUIs).
--- focused = 100 - 2.5*t %, unfocused = 100 - 4*t %
---   t = 1 → 97.5 % / 96 %  (default: about the same as stock Omarchy)
---   t = 5 → 87.5 % / 80 %  (glass mode)
---
--- transparency_multiplier (m): the apps Omarchy names as transparent
--- (transparent-window tag: Nautilus, 1Password, omawrite, and windows
--- toggled with Super + Backspace).
--- focused = 100 - 0.75*m %, unfocused = 100 - 3.75*m %
---   m = 1 → 99.25 % / 96.25 %  (default: about the same as stock Omarchy's 98.5 / 96)
---   m = 2 → 98.5 % / 92.5 %    (glass mode)
---   m = 0 → fully solid. Keep m below 25 (unfocused windows reach 0 % near 26.7).
---
--- solid_transparency_multiplier (s): every other window (browsers, video
--- players, games, Steam, …), which Omarchy keeps solid. Focused stays 100 %,
--- unfocused = 100 - 2.5*s %
---   s = 1 → 97.5 %
---   s = 0 → fully solid, like stock Omarchy (glass mode)
-local transparency_multiplier = 1
-local terminal_transparency_multiplier = 1
-local solid_transparency_multiplier = 1
-
--- Catch-all first, then the named apps, terminal rule last (later rules
--- win; terminals also carry transparent-window, so their own rule must come
--- after it). All three also match class and title so Hyprland re-runs them
--- together whenever a window's title changes; without that, terminals
--- flicker between values.
-o.window({ class = ".*", title = ".*" }, {
-  opacity = string.format("1.0 %.3f", (100 - 2.5 * solid_transparency_multiplier) / 100),
-})
-o.window({ class = ".*", title = ".*", tag = "transparent-window" }, {
-  opacity = string.format("%.4f %.4f",
-    (100 - 0.75 * transparency_multiplier) / 100,
-    (100 - 3.75 * transparency_multiplier) / 100),
-})
-o.window({ class = ".*", title = ".*", tag = "terminal" }, {
-  opacity = string.format("%.3f %.3f",
-    (100 - 2.5 * terminal_transparency_multiplier) / 100,
-    (100 - 4 * terminal_transparency_multiplier) / 100),
-})
+-- Glass mode: "<while using it> <clicked away>" for each group.
+-- Later rules win, so keep this order.
+o.window({ class = ".*", title = ".*" }, { opacity = "1.0 1.0" })                               -- all other apps
+o.window({ class = ".*", title = ".*", tag = "transparent-window" }, { opacity = "0.985 0.925" }) -- selected apps
+o.window({ class = ".*", title = ".*", tag = "terminal" }, { opacity = "0.875 0.8" })            -- terminals
 ```
 
-Glass mode is `terminal_transparency_multiplier = 5`, `transparency_multiplier = 2` and `solid_transparency_multiplier = 0`: terminals see-through, the named apps 98.5 % while focused and 92.5 % when you click away, everything else always 100 % solid.
-
-To add an app to the named group, tag it in the same file, above the snippet: `o.transparent_window("org.gnome.TextEditor")` (find the class with `hyprctl clients`). For a frosted look, also pick **Glassy** in Omarchy's **Appearance → Windows → Window Opacity** menu, which adds blur behind see-through windows. Older Omarchy versions used a `default-opacity` tag instead of `transparent-window`; the snippet needs Omarchy 4.
+To add an app to the selected group, put `o.transparent_window("org.gnome.TextEditor")` above the snippet (find the class with `hyprctl clients`). For a frosted look, also pick **Glassy** in Omarchy's **Appearance → Windows → Window Opacity** menu. The snippet needs Omarchy 4 or newer.
 
 ## What's inside
 
